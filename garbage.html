@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>B地区 ごみの日</title>
+
+<style>
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP",sans-serif;
+  background:#f3f6f4;
+  color:#222;
+}
+
+header{
+  background:#16864b;
+  color:white;
+  padding:22px 16px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:25px;
+}
+
+header p{
+  margin:6px 0 0;
+  font-size:14px;
+}
+
+main{
+  max-width:600px;
+  margin:auto;
+  padding:16px;
+}
+
+.card{
+  background:white;
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:15px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.today{
+  text-align:center;
+}
+
+.date{
+  color:#666;
+  margin-bottom:8px;
+}
+
+.big{
+  font-size:25px;
+  font-weight:bold;
+  line-height:1.5;
+}
+
+.none{
+  color:#666;
+}
+
+.next{
+  background:#eaf7ef;
+}
+
+h2{
+  font-size:18px;
+  margin-top:0;
+}
+
+.schedule-row{
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+}
+
+.schedule-row:last-child{
+  border-bottom:none;
+}
+
+.day{
+  font-weight:bold;
+}
+
+.type{
+  margin-top:4px;
+  color:#444;
+}
+
+.note{
+  font-size:13px;
+  color:#666;
+  line-height:1.6;
+}
+
+.home{
+  display:block;
+  background:#333;
+  color:white;
+  text-decoration:none;
+  text-align:center;
+  padding:15px;
+  border-radius:12px;
+  margin-top:20px;
+}
+
+footer{
+  text-align:center;
+  color:#888;
+  font-size:12px;
+  padding:25px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🗑️ ごみの日</h1>
+  <p>上越市 B地区</p>
+</header>
+
+<main>
+
+<div class="card today">
+  <div class="date" id="todayDate"></div>
+  <div class="big" id="todayGarbage"></div>
+</div>
+
+<div class="card next">
+  <h2>➡️ 次回の収集</h2>
+  <div class="big" id="nextGarbage"></div>
+</div>
+
+<div class="card">
+  <h2>📅 これから7日間</h2>
+  <div id="weekSchedule"></div>
+</div>
+
+<div class="card">
+  <h2>♻️ B地区の基本収集日</h2>
+
+  <p>🔥 燃やせるごみ・生ごみ<br>
+  <strong>毎週 火・木・土曜日</strong></p>
+
+  <p>📦 容器包装（紙・プラスチック製）<br>
+  <strong>毎週 水曜日</strong></p>
+
+  <p>🗑️ 燃やせないごみ<br>
+  <strong>第1・第3 月曜日</strong></p>
+
+  <p>🥫 缶・びん・ペットボトル<br>
+  <strong>第1・第3 金曜日</strong></p>
+
+  <p>📰 新聞紙・雑誌類・段ボール<br>
+  <strong>第2・第4 金曜日</strong></p>
+</div>
+
+<div class="card">
+  <h2>⚠️ ご注意</h2>
+  <div class="note">
+    このページは上越市「令和8年度 ごみ分別収集カレンダー
+    B地区」をもとにした町内会用ページです。<br><br>
+    年末年始、祝日、乾電池・蛍光灯などの特別収集日は
+    通常の曜日と異なる場合があります。
+    正確な収集日は上越市の公式カレンダーもご確認ください。
+  </div>
+</div>
+
+<a class="home" href="index.html">
+  🏠 町内会トップへ
+</a>
+
+</main>
+
+<footer>
+〇〇町内会
+</footer>
+
+<script>
+
+// ---------- 基本ルール ----------
+
+function nthWeekday(date){
+  return Math.floor((date.getDate()-1)/7)+1;
+}
+
+function garbageForDate(date){
+
+  const day = date.getDay();
+  const nth = nthWeekday(date);
+
+  let garbage=[];
+
+  // 月曜日
+  if(day===1){
+    if(nth===1 || nth===3){
+      garbage.push("🗑️ 燃やせないごみ");
+    }
+  }
+
+  // 火・木・土
+  if(day===2 || day===4 || day===6){
+    garbage.push("🔥 燃やせるごみ");
+    garbage.push("🥬 生ごみ");
+  }
+
+  // 水曜日
+  if(day===3){
+    garbage.push("📦 容器包装（紙・プラ）");
+  }
+
+  // 金曜日
+  if(day===5){
+
+    if(nth===1 || nth===3){
+      garbage.push("🥫 缶・びん・ペットボトル");
+    }
+
+    if(nth===2 || nth===4){
+      garbage.push("📰 新聞紙・雑誌類・段ボール");
+    }
+  }
+
+  return garbage;
+}
+
+
+// ---------- 日付表示 ----------
+
+function formatDate(date){
+
+  const weekdays=[
+    "日","月","火","水","木","金","土"
+  ];
+
+  return (date.getMonth()+1)+"月"+
+         date.getDate()+"日（"+
+         weekdays[date.getDay()]+
+         "）";
+}
+
+
+// ---------- 今日 ----------
+
+const today=new Date();
+
+today.setHours(0,0,0,0);
+
+document.getElementById("todayDate").textContent=
+  "今日 "+formatDate(today);
+
+const todayGarbage=garbageForDate(today);
+
+if(todayGarbage.length){
+
+  document.getElementById("todayGarbage").innerHTML=
+    todayGarbage.join("<br>");
+
+}else{
+
+  document.getElementById("todayGarbage").innerHTML=
+    '<span class="none">今日は収集なし</span>';
+
+}
+
+
+// ---------- 次回 ----------
+
+for(let i=1;i<=14;i++){
+
+  const d=new Date(today);
+
+  d.setDate(today.getDate()+i);
+
+  const garbage=garbageForDate(d);
+
+  if(garbage.length){
+
+    document.getElementById("nextGarbage").innerHTML=
+      formatDate(d)+"<br>"+
+      garbage.join("<br>");
+
+    break;
+  }
+}
+
+
+// ---------- 7日間 ----------
+
+const week=document.getElementById("weekSchedule");
+
+for(let i=0;i<7;i++){
+
+  const d=new Date(today);
+
+  d.setDate(today.getDate()+i);
+
+  const garbage=garbageForDate(d);
+
+  if(garbage.length){
+
+    const row=document.createElement("div");
+
+    row.className="schedule-row";
+
+    row.innerHTML=
+      '<div class="day">'+
+      formatDate(d)+
+      '</div>'+
+      '<div class="type">'+
+      garbage.join("・")+
+      '</div>';
+
+    week.appendChild(row);
+  }
+}
+
+</script>
+
+</body>
+</html>
