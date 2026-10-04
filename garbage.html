@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>B地区 ごみの日</title>
+<title>A地区 ごみの日</title>
 
 <style>
 body{
@@ -13,90 +13,77 @@ body{
   background:#f3f6f4;
   color:#222;
 }
-
 header{
   background:#16864b;
   color:white;
   padding:22px 16px;
   text-align:center;
 }
-
 header h1{
   margin:0;
-  font-size:25px;
+  font-size:26px;
 }
-
 header p{
   margin:6px 0 0;
   font-size:14px;
 }
-
 main{
   max-width:600px;
   margin:auto;
   padding:16px;
 }
-
 .card{
   background:white;
   border-radius:18px;
   padding:20px;
-  margin-bottom:15px;
+  margin-bottom:16px;
   box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-
 .today{
   text-align:center;
 }
-
 .date{
   color:#666;
-  margin-bottom:8px;
+  margin-bottom:10px;
 }
-
 .big{
-  font-size:25px;
+  font-size:23px;
   font-weight:bold;
-  line-height:1.5;
+  line-height:1.65;
 }
-
 .none{
-  color:#666;
+  color:#777;
 }
-
 .next{
   background:#eaf7ef;
 }
-
 h2{
   font-size:18px;
   margin-top:0;
 }
-
 .schedule-row{
-  padding:12px 0;
+  padding:13px 0;
   border-bottom:1px solid #eee;
 }
-
 .schedule-row:last-child{
   border-bottom:none;
 }
-
 .day{
   font-weight:bold;
 }
-
 .type{
-  margin-top:4px;
-  color:#444;
-}
-
-.note{
-  font-size:13px;
-  color:#666;
+  margin-top:5px;
   line-height:1.6;
 }
-
+.rule{
+  line-height:1.7;
+  margin-bottom:17px;
+}
+.note{
+  font-size:14px;
+  color:#555;
+  line-height:1.7;
+}
 .home{
   display:block;
   background:#333;
@@ -107,7 +94,6 @@ h2{
   border-radius:12px;
   margin-top:20px;
 }
-
 footer{
   text-align:center;
   color:#888;
@@ -121,7 +107,7 @@ footer{
 
 <header>
   <h1>🗑️ ごみの日</h1>
-  <p>上越市 B地区</p>
+  <p>上越市 A地区</p>
 </header>
 
 <main>
@@ -142,32 +128,49 @@ footer{
 </div>
 
 <div class="card">
-  <h2>♻️ B地区の基本収集日</h2>
+  <h2>♻️ 基本の収集日</h2>
 
-  <p>🔥 燃やせるごみ・生ごみ<br>
-  <strong>毎週 火・木・土曜日</strong></p>
+  <div class="rule">
+    🔥 <strong>燃やせるごみ・生ごみ</strong><br>
+    毎週 月・水・金曜日
+  </div>
 
-  <p>📦 容器包装（紙・プラスチック製）<br>
-  <strong>毎週 水曜日</strong></p>
+  <div class="rule">
+    🗑️ <strong>燃やせないごみ</strong><br>
+    第1・第3土曜日
+  </div>
 
-  <p>🗑️ 燃やせないごみ<br>
-  <strong>第1・第3 月曜日</strong></p>
+  <div class="rule">
+    🥫 <strong>缶・びん・ペットボトル</strong><br>
+    第1・第3火曜日
+  </div>
 
-  <p>🥫 缶・びん・ペットボトル<br>
-  <strong>第1・第3 金曜日</strong></p>
+  <div class="rule">
+    📰 <strong>新聞紙・雑誌類・段ボール</strong><br>
+    第2・第4火曜日
+  </div>
 
-  <p>📰 新聞紙・雑誌類・段ボール<br>
-  <strong>第2・第4 金曜日</strong></p>
+  <div class="rule">
+    📦 <strong>容器包装（紙製・プラスチック製）</strong><br>
+    毎週木曜日
+  </div>
 </div>
 
 <div class="card">
-  <h2>⚠️ ご注意</h2>
+  <h2>🔋 特別収集</h2>
   <div class="note">
-    このページは上越市「令和8年度 ごみ分別収集カレンダー
-    B地区」をもとにした町内会用ページです。<br><br>
-    年末年始、祝日、乾電池・蛍光灯などの特別収集日は
-    通常の曜日と異なる場合があります。
-    正確な収集日は上越市の公式カレンダーもご確認ください。
+    乾電池・ライター類、蛍光灯・電球は
+    月ごとに指定された日に収集されます。
+    このページでは令和8年度の指定日を
+    自動的に表示します。
+  </div>
+</div>
+
+<div class="card">
+  <h2>⏰ ごみを出す時間</h2>
+  <div class="note">
+    朝8時30分までに、町内会で決められた
+    集積所へ出してください。
   </div>
 </div>
 
@@ -183,54 +186,150 @@ footer{
 
 <script>
 
-// ---------- 基本ルール ----------
+// ------------------------------
+// 第何曜日かを計算
+// ------------------------------
 
 function nthWeekday(date){
   return Math.floor((date.getDate()-1)/7)+1;
 }
 
-function garbageForDate(date){
 
-  const day = date.getDay();
-  const nth = nthWeekday(date);
+// ------------------------------
+// 日付を YYYY-MM-DD に変換
+// ------------------------------
 
-  let garbage=[];
+function dateKey(date){
 
-  // 月曜日
-  if(day===1){
-    if(nth===1 || nth===3){
-      garbage.push("🗑️ 燃やせないごみ");
-    }
-  }
+  const y=date.getFullYear();
 
-  // 火・木・土
-  if(day===2 || day===4 || day===6){
-    garbage.push("🔥 燃やせるごみ");
-    garbage.push("🥬 生ごみ");
-  }
+  const m=String(
+    date.getMonth()+1
+  ).padStart(2,"0");
 
-  // 水曜日
-  if(day===3){
-    garbage.push("📦 容器包装（紙・プラ）");
-  }
+  const d=String(
+    date.getDate()
+  ).padStart(2,"0");
 
-  // 金曜日
-  if(day===5){
-
-    if(nth===1 || nth===3){
-      garbage.push("🥫 缶・びん・ペットボトル");
-    }
-
-    if(nth===2 || nth===4){
-      garbage.push("📰 新聞紙・雑誌類・段ボール");
-    }
-  }
-
-  return garbage;
+  return `${y}-${m}-${d}`;
 }
 
 
-// ---------- 日付表示 ----------
+// ------------------------------
+// 特別収集日
+// ------------------------------
+
+const specialDays={
+
+  "2026-04-14":"🔋 乾電池・ライター類",
+  "2026-05-12":"💡 蛍光灯・電球",
+  "2026-06-09":"🔋 乾電池・ライター類",
+  "2026-07-14":"💡 蛍光灯・電球",
+  "2026-08-11":"🔋 乾電池・ライター類",
+  "2026-09-08":"💡 蛍光灯・電球",
+
+  "2026-10-13":"🔋 乾電池・ライター類",
+  "2026-11-10":"💡 蛍光灯・電球",
+  "2026-12-08":"🔋 乾電池・ライター類",
+
+  "2027-01-12":"💡 蛍光灯・電球",
+  "2027-02-09":"🔋 乾電池・ライター類",
+  "2027-03-09":"💡 蛍光灯・電球"
+
+};
+
+
+// ------------------------------
+// その日の収集品目
+// ------------------------------
+
+function garbageForDate(date){
+
+  const day=date.getDay();
+  const nth=nthWeekday(date);
+
+  let garbage=[];
+
+
+  // 月・水・金
+  // 燃やせるごみ＋生ごみ
+
+  if(day===1 || day===3 || day===5){
+
+    garbage.push("🔥 燃やせるごみ");
+    garbage.push("🥬 生ごみ");
+
+  }
+
+
+  // 第1・第3 土曜日
+  // 燃やせないごみ
+
+  if(day===6 && (nth===1 || nth===3)){
+
+    garbage.push("🗑️ 燃やせないごみ");
+
+  }
+
+
+  // 火曜日
+
+  if(day===2){
+
+    // 第1・第3
+    if(nth===1 || nth===3){
+
+      garbage.push(
+        "🥫 缶・びん・ペットボトル"
+      );
+
+    }
+
+    // 第2・第4
+    if(nth===2 || nth===4){
+
+      garbage.push(
+        "📰 新聞紙・雑誌類・段ボール"
+      );
+
+    }
+
+  }
+
+
+  // 毎週木曜日
+  // 容器包装
+
+  if(day===4){
+
+    garbage.push(
+      "📦 容器包装（紙製・プラスチック製）"
+    );
+
+  }
+
+
+  // 特別収集
+
+  const key=dateKey(date);
+
+  if(specialDays[key]){
+
+    garbage.push(
+      specialDays[key]
+    );
+
+  }
+
+
+  return garbage;
+
+}
+
+
+// ------------------------------
+// 日付表示
+// ------------------------------
 
 function formatDate(date){
 
@@ -238,86 +337,128 @@ function formatDate(date){
     "日","月","火","水","木","金","土"
   ];
 
-  return (date.getMonth()+1)+"月"+
-         date.getDate()+"日（"+
-         weekdays[date.getDay()]+
-         "）";
+  return (
+    (date.getMonth()+1)+"月"+
+    date.getDate()+"日（"+
+    weekdays[date.getDay()]+
+    "）"
+  );
+
 }
 
 
-// ---------- 今日 ----------
+// ------------------------------
+// 今日
+// ------------------------------
 
 const today=new Date();
 
 today.setHours(0,0,0,0);
 
-document.getElementById("todayDate").textContent=
+document.getElementById(
+  "todayDate"
+).textContent=
   "今日 "+formatDate(today);
 
-const todayGarbage=garbageForDate(today);
+
+const todayGarbage=
+  garbageForDate(today);
+
 
 if(todayGarbage.length){
 
-  document.getElementById("todayGarbage").innerHTML=
+  document.getElementById(
+    "todayGarbage"
+  ).innerHTML=
     todayGarbage.join("<br>");
 
 }else{
 
-  document.getElementById("todayGarbage").innerHTML=
-    '<span class="none">今日は収集なし</span>';
+  document.getElementById(
+    "todayGarbage"
+  ).innerHTML=
+    '<span class="none">'+
+    '今日は収集なし'+
+    '</span>';
 
 }
 
 
-// ---------- 次回 ----------
+// ------------------------------
+// 次回収集
+// ------------------------------
 
-for(let i=1;i<=14;i++){
+for(let i=1;i<=31;i++){
 
   const d=new Date(today);
 
-  d.setDate(today.getDate()+i);
+  d.setDate(
+    today.getDate()+i
+  );
 
-  const garbage=garbageForDate(d);
+  const garbage=
+    garbageForDate(d);
 
   if(garbage.length){
 
-    document.getElementById("nextGarbage").innerHTML=
-      formatDate(d)+"<br>"+
+    document.getElementById(
+      "nextGarbage"
+    ).innerHTML=
+      formatDate(d)+
+      "<br>"+
       garbage.join("<br>");
 
     break;
+
   }
+
 }
 
 
-// ---------- 7日間 ----------
+// ------------------------------
+// これから7日間
+// ------------------------------
 
-const week=document.getElementById("weekSchedule");
+const week=
+  document.getElementById(
+    "weekSchedule"
+  );
+
 
 for(let i=0;i<7;i++){
 
   const d=new Date(today);
 
-  d.setDate(today.getDate()+i);
+  d.setDate(
+    today.getDate()+i
+  );
 
-  const garbage=garbageForDate(d);
+  const garbage=
+    garbageForDate(d);
+
 
   if(garbage.length){
 
-    const row=document.createElement("div");
+    const row=
+      document.createElement(
+        "div"
+      );
 
-    row.className="schedule-row";
+    row.className=
+      "schedule-row";
 
     row.innerHTML=
       '<div class="day">'+
       formatDate(d)+
       '</div>'+
       '<div class="type">'+
-      garbage.join("・")+
+      garbage.join("<br>")+
       '</div>';
 
     week.appendChild(row);
+
   }
+
 }
 
 </script>
